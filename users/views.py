@@ -214,26 +214,26 @@ def home(request):
                 longitude=data['data']['longitude']
                 # timezone=data['data']['timezone_offset']
                 
-                print("device_type_final",device_type_final)
-                print('webgl:', webgl)
-                print('webgl_total_time:', webgl_total_time)
-                print('canvas_hash:', canvas_hash)
-                print('canvas_total_time:', canvas_total_time)
-                print('plugins:', plugins)
-                print('plugins_totaltime:', plugins_totaltime)
-                print('browser_fonts:', browser_fonts)
-                print('browser_fonts_totaltime:', browser_fonts_totaltime)
-                print('browser_version:', browser_version)
-                print('browser_version_total_time:', browser_version_total_time)
-                print('user_agent:', user_agent)
-                print('useragent_total_time:', useragent_total_time)
-                print('OS:', OS)
-                print('os_plat_total_time:', os_plat_total_time)
-                print('screen_res_height:', screen_res_height)
-                print('screen_res_width:', screen_res_width)
-                print('screen_res_total_time:', screen_res_total_time)
-                print('latitude:', latitude)
-                print('longitude:', longitude)
+                # print("device_type_final",device_type_final)
+                # print('webgl:', webgl)
+                # print('webgl_total_time:', webgl_total_time)
+                # print('canvas_hash:', canvas_hash)
+                # print('canvas_total_time:', canvas_total_time)
+                # print('plugins:', plugins)
+                # print('plugins_totaltime:', plugins_totaltime)
+                # print('browser_fonts:', browser_fonts)
+                # print('browser_fonts_totaltime:', browser_fonts_totaltime)
+                # print('browser_version:', browser_version)
+                # print('browser_version_total_time:', browser_version_total_time)
+                # print('user_agent:', user_agent)
+                # print('useragent_total_time:', useragent_total_time)
+                # print('OS:', OS)
+                # print('os_plat_total_time:', os_plat_total_time)
+                # print('screen_res_height:', screen_res_height)
+                # print('screen_res_width:', screen_res_width)
+                # print('screen_res_total_time:', screen_res_total_time)
+                # print('latitude:', latitude)
+                # print('longitude:', longitude)
                 time_url="https://api.ipgeolocation.io/ipgeo?apiKey={0}&ip={1}".format(time_api_key,request.client_ip)
                 # time_url="https://api.ipgeolocation.io/ipgeo?apiKey={0}&ip={1}".format(time_api_key,"122.180.223.178")
                 res=requests.get(time_url).json()
@@ -278,9 +278,10 @@ def home(request):
                     region = res['region']
                     country = res['country']
                     lat_long = res['loc']
+                    print("user denied access latlong",lat_long)
                     location_final=str(res['country'])+"-"+str(res['region'])+"-"+str(res['city'])
                     time_zone = res['timezone']
-                    location_totaltime=0 
+                
                     # "ip": ip_address,
                     # city= response.get("city")
                     
@@ -288,12 +289,9 @@ def home(request):
                     # country= response.get("country_name")
                     # print(data)
                    
-                else:
-                    location_totaltime=0    
-                    #location end-------------------------
-                
+              
                 total_end=time.time()
-                overall_totaltime=total_end-total_start
+               
                 # csrf_token = csrf.get_token(request)
                     # print(request.META)
                 browser_final=str(browser_ua.family)+"-"+str(browser_ua.version_string)
@@ -301,6 +299,7 @@ def home(request):
                     # print(ip_address)
                 login_status='NFE'
                 screen_size=str(screen_res_height)+":"+str(screen_res_width)
+                overall_totaltime=total_end-total_start
                 data=data_collected(UID=uid,prev_date=last_login_date,login_count=instance_count,login_status=login_status,start_week=day_name,screen_size=screen_size,Os=OS,system_type=device_type_final,userid=username,latlong=lat_long,browser=browser_final,location=location_final,latitude=latitude,longitude=longitude,webgl=webgl,canvas=canvas_hash,ip=request.client_ip,language=lang,login_time=str(parsed_time.time()),start_date=str(parsed_time.date()),time_zone=time_zone,rtt=overall_totaltime)
                 data.save()
     return render(request, 'users/home.html')
