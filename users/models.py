@@ -40,8 +40,8 @@ class data_collected(models.Model):
     # webgl_totaltime=models.CharField(max_length=200,default=0,blank=True,null=True)
     # lang_totaltime=models.CharField(max_length=200,default=0,blank=True,null=True)
     #geolocation stuff --->
-    latitude = models.FloatField(default=0,blank=True,null=True)
-    longitude = models.FloatField(default=0,blank=True,null=True)
+    # latitude = models.FloatField(default=0,blank=True,null=True)
+    # longitude = models.FloatField(default=0,blank=True,null=True)
     # geolocation_totaltime=models.CharField(max_length=200,default=0,blank=True,null=True)
     rtt=models.CharField(max_length=200,default=0,blank=True,null=True)
 

@@ -265,12 +265,10 @@ def home(request):
                     location_final = str(res['results'][0]['country'])+str(res['results'][0]['state'])+str(res['results'][0]['city'])
                     time_zone = res.get('results', [{}])[0].get('timezone', {}).get('name')
                     lat_long=str(latitude)+":"+str(longitude)
-                    location_end=time.time()
-                    location_totaltime=location_end-location_start
-                # locay=str(city+region+country+"from geoapify"
+                
                 if latitude is  None and longitude is  None:
-                    url="https://ipinfo.io/{0}?token={1}".format(request.client_ip,token) 
-                    # url="https://ipinfo.io/{0}?token={1}".format("34.82.78.16",token) 
+                    # url="https://ipinfo.io/{0}?token={1}".format(request.client_ip,token) 
+                    url="https://ipinfo.io/{0}?token={1}".format("34.82.78.16",token) 
                     print(url)
                     res=requests.get(url).json()
                     print(res)
