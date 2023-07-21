@@ -278,20 +278,21 @@ def home(request):
                     region = res['region']
                     country = res['country']
                     lat_long = res['loc']
-                    print("user denied access latlong",lat_long)
+                    print("user denied access latlong inside-->",lat_long)
                     location_final=str(res['country'])+"-"+str(res['region'])+"-"+str(res['city'])
                     time_zone = res['timezone']
                 
                     # "ip": ip_address,
                     # city= response.get("city")
-                    
+                else:
+                    pass    
                     
                     # country= response.get("country_name")
                     # print(data)
                    
               
                 total_end=time.time()
-                print("user denied access latlong",lat_long)
+                print("user denied access latlong outside -->",lat_long)
                 # csrf_token = csrf.get_token(request)
                     # print(request.META)
                 browser_final=str(browser_ua.family)+"-"+str(browser_ua.version_string)
