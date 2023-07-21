@@ -299,7 +299,7 @@ def home(request):
                 login_status='NFE'
                 screen_size=str(screen_res_height)+":"+str(screen_res_width)
                 overall_totaltime=total_end-total_start
-                data=data_collected(UID=uid,prev_date=last_login_date,login_count=instance_count,login_status=login_status,start_week=day_name,screen_size=screen_size,Os=OS,system_type=device_type_final,userid=username,latlong=lat_long,browser=browser_final,location=location_final,latitude=latitude,longitude=longitude,webgl=webgl,canvas=canvas_hash,ip=request.client_ip,language=lang,login_time=str(parsed_time.time()),start_date=str(parsed_time.date()),time_zone=time_zone,rtt=overall_totaltime)
+                data=data_collected(UID=uid,prev_date=last_login_date,login_count=instance_count,login_status=login_status,start_week=day_name,screen_size=screen_size,Os=OS,system_type=device_type_final,userid=username,latlong=lat_long,browser=browser_final,location=location_final,webgl=webgl,canvas=canvas_hash,ip=request.client_ip,language=lang,login_time=str(parsed_time.time()),start_date=str(parsed_time.date()),time_zone=time_zone,rtt=overall_totaltime)
                 data.save()
     return render(request, 'users/home.html')
 
