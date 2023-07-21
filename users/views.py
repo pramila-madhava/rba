@@ -291,7 +291,7 @@ def home(request):
                    
               
                 total_end=time.time()
-               
+                print("user denied access latlong",lat_long)
                 # csrf_token = csrf.get_token(request)
                     # print(request.META)
                 browser_final=str(browser_ua.family)+"-"+str(browser_ua.version_string)
