@@ -27,16 +27,16 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
-CSRF_TRUSTED_ORIGINS=[
-    # "https://web-production-07f6.up.railway.app",
-   "https://rba-production.up.railway.app"
-]
-CORS_ALLOWED_ORIGINS = [
-    # "https://web-production-07f6.up.railway.app",
-    "https://rba-production.up.railway.app/",
-    # Add other allowed origins here if needed
-]
+if not DEBUG:
+    CSRF_TRUSTED_ORIGINS=[
+        # "https://web-production-07f6.up.railway.app",
+    "https://rba-production.up.railway.app"
+    ]
+    CORS_ALLOWED_ORIGINS = [
+        # "https://web-production-07f6.up.railway.app",
+        "https://rba-production.up.railway.app/",
+        # Add other allowed origins here if needed
+    ]
 # Application definition
 
 INSTALLED_APPS = [
