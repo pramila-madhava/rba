@@ -2,7 +2,7 @@
 {% if user.is_authenticated %}
     <div class="alert alert-success" role="alert">
         <h3>Welcome {{ user.username }}!</h3>
-        <a href="{% url 'logout' %}">Logout?</a>
+        <a href="{% url 'logout' %}" id="logoutLink">Logout?</a>
         <b>Hash:</b><span id="hash-code"></span><br />
 <canvas id="myCanvas" style="border: 1px solid #000000"></canvas>
 <div id="list"></div>
@@ -692,25 +692,25 @@ function getCookie(name) {
 ///  uppar wale makes all run except firefox
 
 
-async function main() {
-  try {
-    const location = await getLocation();
-    if (location.latitude !== null && location.longitude !== null) {
-      const latitude = location.latitude;
-      const longitude = location.longitude;
-      await sendData(latitude, longitude);
-    } else {
-      console.log('User denied location access.');
-      // Set latitude and longitude as None or any other desired values
-      const latitude = null;
-      const longitude = null;
-      await sendData(latitude, longitude);
-      // Perform any desired actions or error handling
-    }
-  } catch (error) {
-    console.log(error);
-  }
-}
+// async function main() {
+//   try {
+//     const location = await getLocation();
+//     if (location.latitude !== null && location.longitude !== null) {
+//       const latitude = location.latitude;
+//       const longitude = location.longitude;
+//       await sendData(latitude, longitude);
+//     } else {
+//       console.log('User denied location access yeh hai main function ka scene.');
+//       // Set latitude and longitude as None or any other desired values
+//       const latitude = null;
+//       const longitude = null;
+//       await sendData(latitude, longitude);
+//       // Perform any desired actions or error handling
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
 
 let device_type_final; // Declare global variable
 
@@ -754,6 +754,28 @@ async function checkDeviceType() {
     }
   }
 }
+async function main() {
+  try {
+    const location = await getLocation();
+    const device_type_final = await checkDeviceType(); // Get the device type before sending data
+
+    if (location.latitude !== null && location.longitude !== null) {
+      const latitude = location.latitude;
+      const longitude = location.longitude;
+      await sendData(latitude, longitude, device_type_final); // Pass device_type_final to sendData function
+      // revokeGeolocationPermission();
+    } else {
+      console.log('User denied location access yeh hai main function ka scene.');
+      // Set latitude and longitude as None or any other desired values
+      const latitude = null;
+      const longitude = null;
+      await sendData(latitude, longitude, device_type_final); // Pass device_type_final to sendData function
+      // Perform any desired actions or error handling
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 (async () => {
   try {
@@ -790,7 +812,13 @@ function getLocation() {
     }
   });
 }
-
+// function revokeGeolocationPermission() {
+//   navigator.permissions.revoke({ name: 'geolocation' }).then(() => {
+//     console.log('Geolocation permission revoked.');
+//   }).catch((err) => {
+//     console.error('Error revoking geolocation permission:', err);
+//   });
+// }
 async function sendData(latitude, longitude) {
   // Your code to get the CSRF token
   const csrftoken = getCookie('csrftoken');
@@ -844,6 +872,40 @@ async function sendData(latitude, longitude) {
     console.log('Error:', error);
   }
 }
-main();
+
+function handleLogout() {
+  // Clear geolocation data by setting it to null
+  if (navigator.geolocation) {
+    navigator.geolocation.clearWatch(); // If you're using watchPosition, clear the watch here
+    navigator.geolocation.getCurrentPosition(
+      () => {}, // Success callback (empty function)
+      () => {}, // Error callback (empty function)
+      { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 } // Options with maximumAge set to 0 to force geolocation data clearing
+    );
+  }
+
+  // Clear localStorage
+  localStorage.clear();
+
+  // Clear sessionStorage
+  sessionStorage.clear();
+
+  // Clear Cache
+  if (caches) {
+    caches.keys().then((cacheNames) => {
+      cacheNames.forEach((cacheName) => {
+        caches.delete(cacheName);
+      });
+      console.log('Cache cleared.');
+    });
+  }
+
+  // Perform any other logout actions, for example, redirecting the user to the logout URL
+  window.location.href = "{% url 'logout' %}";
+}
+
+// Add the event listener to the Logout link
+document.getElementById("logoutLink").addEventListener("click", handleLogout);
+
 
 </script>

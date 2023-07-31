@@ -44,7 +44,8 @@ class CustomLogoutView(LogoutView):
         del request.session['uid']
         current_datetime = datetime.datetime.now()
         end_date = current_datetime.date()
-        print("the end date is ",end_date)
+        # print("the end date is ",end_date)
+        
         obj = data_collected.objects.get(UID=uid)
 
         # Update the end_date field with the new value
@@ -72,6 +73,7 @@ class CustomLogoutView(LogoutView):
         # # end_date = last_instance.end_date
         #     print(second_last_instance.login_count)
         print(end_date)
+        print("data is updated ")
         return super().dispatch(request, *args, **kwargs)
 @csrf_exempt
 def home(request):
@@ -212,28 +214,7 @@ def home(request):
                 device_type_final = data['data']['device_type_final']
                 latitude=data['data']['latitude']
                 longitude=data['data']['longitude']
-                # timezone=data['data']['timezone_offset']
-                
-                # print("device_type_final",device_type_final)
-                # print('webgl:', webgl)
-                # print('webgl_total_time:', webgl_total_time)
-                # print('canvas_hash:', canvas_hash)
-                # print('canvas_total_time:', canvas_total_time)
-                # print('plugins:', plugins)
-                # print('plugins_totaltime:', plugins_totaltime)
-                # print('browser_fonts:', browser_fonts)
-                # print('browser_fonts_totaltime:', browser_fonts_totaltime)
-                # print('browser_version:', browser_version)
-                # print('browser_version_total_time:', browser_version_total_time)
-                # print('user_agent:', user_agent)
-                # print('useragent_total_time:', useragent_total_time)
-                # print('OS:', OS)
-                # print('os_plat_total_time:', os_plat_total_time)
-                # print('screen_res_height:', screen_res_height)
-                # print('screen_res_width:', screen_res_width)
-                # print('screen_res_total_time:', screen_res_total_time)
-                # print('latitude:', latitude)
-                # print('longitude:', longitude)
+           
                 time_url="https://api.ipgeolocation.io/ipgeo?apiKey={0}&ip={1}".format(time_api_key,request.client_ip)
                 # time_url="https://api.ipgeolocation.io/ipgeo?apiKey={0}&ip={1}".format(time_api_key,"122.180.223.178")
                 res=requests.get(time_url).json()
@@ -266,7 +247,7 @@ def home(request):
                     time_zone = res.get('results', [{}])[0].get('timezone', {}).get('name')
                     lat_long=str(latitude)+":"+str(longitude)
                 
-                if latitude is  None and longitude is  None:
+                else:
                     url="https://ipinfo.io/{0}?token={1}".format(request.client_ip,token) 
                     # url="https://ipinfo.io/{0}?token={1}".format("34.82.78.16",token) 
                     print(url)
@@ -282,8 +263,7 @@ def home(request):
                 
                     # "ip": ip_address,
                     # city= response.get("city")
-                else:
-                    pass    
+                
                     
                     # country= response.get("country_name")
                     # print(data)
