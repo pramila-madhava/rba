@@ -277,8 +277,8 @@ def home(request):
                     lat_long=str(latitude)+":"+str(longitude)
                 
                 else:
-                    # url="https://ipinfo.io/{0}?token={1}".format(request.client_ip,token) 
-                    url="https://ipinfo.io/{0}?token={1}".format("34.82.78.16",token) 
+                    url="https://ipinfo.io/{0}?token={1}".format(request.client_ip,token) 
+                    # url="https://ipinfo.io/{0}?token={1}".format("34.82.78.16",token) 
                     print(url)
                     res=requests.get(url).json()
                     print(res)
