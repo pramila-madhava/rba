@@ -35,6 +35,41 @@ def get_last_login_date(userid):
 
 from django.contrib.auth.views import LogoutView
 
+# class CustomLogoutView(LogoutView):
+    # def dispatch(self, request, *args, **kwargs):
+    #     # Print a statement when the user logs out
+    #     print("User logged out:", request.user.username)
+    #     uid = request.session.get('uid')
+    #     print("UID value:", uid)
+    #     del request.session['uid']
+    #     current_datetime = datetime.datetime.now()
+    #     end_date = current_datetime.date()
+    #     # print("the end date is ",end_date)
+        
+    #     obj = data_collected.objects.get(UID=uid)
+
+    #     # Update the end_date field with the new value
+    #     obj.end_date = end_date
+
+    #     # Save the changes to the database
+    #     obj.save()
+    #     print("NEW STUFF------------")
+    #     second_last_instance = data_collected.objects.filter(userid=request.user.username).order_by('-id')[1]
+    #     second_last_instance.prev_date=end_date
+    #     second_last_instance.save()
+    #     obj = data_collected.objects.get(UID=uid)
+    #     # obj.period=int(obj.prev_date-end_date)
+    #     date_difference = (obj.prev_date - end_date).days
+    #     # int(date_difference)
+    #     print(date_difference)
+    #     # print(type(int(date_difference)))
+
+    #     obj.period=date_difference
+
+    #     obj.save()
+    #     print(end_date)
+    #     print("data is updated ")
+    #     return super().dispatch(request, *args, **kwargs)
 class CustomLogoutView(LogoutView):
     def dispatch(self, request, *args, **kwargs):
         # Print a statement when the user logs out
@@ -44,37 +79,31 @@ class CustomLogoutView(LogoutView):
         del request.session['uid']
         current_datetime = datetime.datetime.now()
         end_date = current_datetime.date()
-        # print("the end date is ",end_date)
         
-        obj = data_collected.objects.get(UID=uid)
+        # Filter the queryset based on the UID
+        objects_with_uid = data_collected.objects.filter(UID=uid)
 
-        # Update the end_date field with the new value
-        obj.end_date = end_date
+        if objects_with_uid.exists():
+            obj = objects_with_uid.first()  # Use the first object in the queryset
+            # Update the end_date field with the new value
+            obj.end_date = end_date
+            # Save the changes to the database
+            obj.save()
 
-        # Save the changes to the database
-        obj.save()
-        print("NEW STUFF------------")
-        second_last_instance = data_collected.objects.filter(userid=request.user.username).order_by('-id')[1]
-        second_last_instance.prev_date=end_date
-        second_last_instance.save()
-        obj = data_collected.objects.get(UID=uid)
-        # obj.period=int(obj.prev_date-end_date)
-        date_difference = (obj.prev_date - end_date).days
-        # int(date_difference)
-        print(date_difference)
-        # print(type(int(date_difference)))
+            print("NEW STUFF------------")
+            second_last_instance = data_collected.objects.filter(userid=request.user.username).order_by('-id')[1]
+            second_last_instance.prev_date = end_date
+            second_last_instance.save()
 
-        obj.period=date_difference
+            obj = data_collected.objects.get(UID=uid)
+            date_difference = (obj.prev_date - end_date).days
+            print(date_difference)
+            print("data updated")
+        else:
+            print("No object found with UID:", uid)
 
-        obj.save()
-        # if len(instances) >= 2:
-        #     second_last_instance = instances[1]  # Retrieve the second last instance
-        #     end_date = second_last_instance.end_date 
-        # # end_date = last_instance.end_date
-        #     print(second_last_instance.login_count)
-        print(end_date)
-        print("data is updated ")
         return super().dispatch(request, *args, **kwargs)
+
 @csrf_exempt
 def home(request):
   
@@ -248,8 +277,8 @@ def home(request):
                     lat_long=str(latitude)+":"+str(longitude)
                 
                 else:
-                    url="https://ipinfo.io/{0}?token={1}".format(request.client_ip,token) 
-                    # url="https://ipinfo.io/{0}?token={1}".format("34.82.78.16",token) 
+                    # url="https://ipinfo.io/{0}?token={1}".format(request.client_ip,token) 
+                    url="https://ipinfo.io/{0}?token={1}".format("34.82.78.16",token) 
                     print(url)
                     res=requests.get(url).json()
                     print(res)

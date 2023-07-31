@@ -873,15 +873,15 @@ async function sendData(latitude, longitude) {
   }
 }
 
+let watchID = null; // Define the watchID variable at the global scope
+
 function handleLogout() {
-  // Clear geolocation data by setting it to null
+  // Clear geolocation watch by passing the watchID
   if (navigator.geolocation) {
-    navigator.geolocation.clearWatch(); // If you're using watchPosition, clear the watch here
-    navigator.geolocation.getCurrentPosition(
-      () => {}, // Success callback (empty function)
-      () => {}, // Error callback (empty function)
-      { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 } // Options with maximumAge set to 0 to force geolocation data clearing
-    );
+    if (watchID !== null) {
+      navigator.geolocation.clearWatch(watchID);
+      watchID = null; // Reset the watchID
+    }
   }
 
   // Clear localStorage
@@ -906,6 +906,28 @@ function handleLogout() {
 
 // Add the event listener to the Logout link
 document.getElementById("logoutLink").addEventListener("click", handleLogout);
+
+// Function to start the geolocation watch
+// function startGeolocationWatch() {
+//   if (navigator.geolocation) {
+//     watchID = navigator.geolocation.watchPosition(
+//       (position) => {
+//         // Handle geolocation updates
+//         console.log('Geolocation updated:', position.coords.latitude, position.coords.longitude);
+//       },
+//       (error) => {
+//         // Handle geolocation errors
+//         console.error('Error getting geolocation:', error);
+//       }
+//     );
+//   } else {
+//     console.error('Geolocation is not supported by this browser.');
+//   }
+// }
+
+// // Call the function to start geolocation watch
+// startGeolocationWatch();
+
 
 
 </script>
