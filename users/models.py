@@ -62,6 +62,7 @@ class data_collected(models.Model):
     start_week=models.CharField(max_length=200,default=0,blank=True,null=True)
     login_status=models.CharField(max_length=200,default='E',blank=True,null=True)
     login_count=models.IntegerField()
+    user_agent=models.CharField(max_length=200,default=0,blank=True,null=True)
     prev_date=models.DateField(null=True,default=datetime.date.today)
     end_date=models.DateField(null=True,default=datetime.date.today)
     period=models.IntegerField(null=True)
